@@ -1,0 +1,19 @@
+# Maven #
+target/
+
+protocol/
+
+# IDEA #
+.idea
+*.iws
+*.iml
+*.ipr
+dependency-reduced-pom.xml
+
+# Eclipse #
+.settings/
+.classpath
+.project
+.DS_Store
+
+/src/test
