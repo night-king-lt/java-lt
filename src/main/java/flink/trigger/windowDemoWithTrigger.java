@@ -1,6 +1,6 @@
 package flink.trigger;
 
-import dao.ActionData;
+import model.ActionData;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.flink.configuration.Configuration;

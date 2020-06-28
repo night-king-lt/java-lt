@@ -28,6 +28,10 @@
         <spark.version>2.1.0</spark.version>
         <scala.version>${scala.binary.version}.8</scala.version>
         <guava.version>23.0</guava.version>
+        <okhttp.version>3.14.0</okhttp.version>
+        <grpc.version>1.16.1</grpc.version>
+        <httpcomponents.version>4.5.10</httpcomponents.version>
+        <jackson.version>2.11.0</jackson.version>
     </properties>
 
     <dependencies>
@@ -148,6 +152,29 @@
             <version>1.8</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.58</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpcomponents.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>fluent-hc</artifactId>
+            <version>${httpcomponents.version}</version>
+        </dependency>
 
     </dependencies>
 
