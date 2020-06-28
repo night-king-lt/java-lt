@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>flink_lt</groupId>
-    <artifactId>flink_lt</artifactId>
-    <version>1.9</version>
+    <groupId>java-lt</groupId>
+    <artifactId>java-lt</artifactId>
+    <version>1.0</version>
     <build>
         <plugins>
             <plugin>
