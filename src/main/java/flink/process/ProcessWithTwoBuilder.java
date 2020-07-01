@@ -30,8 +30,8 @@ public class ProcessWithTwoBuilder {
         });
 
         dataStream.process(new OneBuilder("one"));
-        dataStream.process(new TwoBuilder("two"));
-        dataStream.process(new TwoBuilder("two2", 25));
+        dataStream.process(new Two2Builder("two2"));
+        dataStream.process(new Two2Builder("two2", 25));
 
         env.execute();
 
@@ -48,6 +48,27 @@ public class ProcessWithTwoBuilder {
         @Override
         public void processElement(String s, Context context, Collector<String> collector) throws Exception {
             System.out.println(s + ": " + name);
+        }
+    }
+
+    public static class Two2Builder extends ProcessFunction<String, String>{
+
+        private String name;
+        private int age;
+
+        Two2Builder(String name){
+            this(name, 20);
+        }
+
+        Two2Builder(String name, int age){
+            this.name = name;
+            this.age = age;
+        }
+
+        @Override
+        public void processElement(String s, Context context, Collector<String> collector) throws Exception {
+            System.out.println(s + ": " + name);
+            System.out.println(this);
         }
     }
 
