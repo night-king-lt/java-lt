@@ -3,6 +3,7 @@ package flink.qps;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.source.ParallelSourceFunction;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 
 /**
@@ -12,24 +13,28 @@ import org.apache.flink.streaming.api.functions.source.SourceFunction;
  */
 public class qpsTest {
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment(1);
-        DataStream<Integer> source = env.addSource(new SourceFunction<Integer>() {
-            @Override
-            public void run(SourceContext<Integer> sourceContext) throws Exception {
-                while (true){
-                    sourceContext.collect( (int) (Math.random() * 100));
-                }
-            }
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment(10);
+        env.enableCheckpointing(Long.parseLong("10000"));
+        DataStream<Integer> source = env.addSource(new MySourceFunction()).setParallelism(1);
 
-            @Override
-            public void cancel() {
-
-            }
-        });
-
-        source.map(new MyQpsMapFunction(10)).print();
+        source.map(new MyQpsMapFunction(20)).setParallelism(1).print().setParallelism(20);
 
         env.execute();
+    }
+
+    public static class MySourceFunction implements ParallelSourceFunction<Integer>{
+
+        @Override
+        public void run(SourceContext<Integer> sourceContext) throws Exception {
+            while (true){
+                sourceContext.collect( (int) (Math.random() * 100));
+            }
+        }
+
+        @Override
+        public void cancel() {
+
+        }
     }
 
     public static class MyQpsMapFunction implements MapFunction<Integer, Integer> {
@@ -51,7 +56,7 @@ public class qpsTest {
             if (counter > maxCount){
                 long lastTime = System.currentTimeMillis();
                 long sleepTime = lastTime - fisrtTime;
-                long timeWindow = 2000;
+                long timeWindow = 60000;
                 if (sleepTime < timeWindow){
                     Thread.sleep(timeWindow - sleepTime);
                 }
