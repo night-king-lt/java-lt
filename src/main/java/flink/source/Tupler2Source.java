@@ -5,17 +5,17 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 
-public class AddSourceTest {
+public class Tupler2Source {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
-        DataStream<Tuple2<String,Integer>> dataStream = env.addSource(new Tuple2Source());
+        DataStream<Tuple2<String,Integer>> dataStream = env.addSource(new innerSource());
         dataStream.print();
 
         env.execute();
     }
 
-    public static class Tuple2Source implements SourceFunction<Tuple2<String,Integer>>{
+    public static class innerSource implements SourceFunction<Tuple2<String,Integer>>{
 
         @Override
         public void run(SourceContext<Tuple2<String, Integer>> sourceContext) throws Exception {
