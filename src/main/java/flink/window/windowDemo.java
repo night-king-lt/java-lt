@@ -1,5 +1,6 @@
 package flink.window;
 
+import flink.join.JoinTest;
 import flink.source.ActionSource;
 import flink.watermark.MyWatermark;
 import model.ActionData;
@@ -36,13 +37,13 @@ public class windowDemo {
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         //定义数据源
-        DataStream<ActionData> source = env.addSource(new ActionSource.innerSource())
+        DataStream<ActionData> source = env.addSource(new JoinTest.ActionSource())
                 .assignTimestampsAndWatermarks(new MyWatermark.innerWatermark());
 
 //        source.print();
 
         source.keyBy(x -> x.getToken() + x.getUserId())
-                .window(TumblingEventTimeWindows.of(Time.seconds(5)))
+                .window(TumblingEventTimeWindows.of(Time.minutes(1)))
                 .process(new ProcessWindowFunction<ActionData, Object, String, TimeWindow>() {
                     @Override
                     public void process(String s, Context context, Iterable<ActionData> iterable, Collector<Object> collector) throws Exception {

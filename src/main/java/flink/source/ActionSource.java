@@ -45,10 +45,10 @@ public class ActionSource {
         @Override
         public void open(Configuration parameters) throws Exception{
             queue = new ArrayBlockingQueue<>(5);
-            poll = Executors.newFixedThreadPool(3);
+            poll = Executors.newFixedThreadPool(1);
             runnable = () -> {
                 try {
-                    for (int i=0; i<10; i ++){
+                    for (int i=0; i<2; i ++){
                         addQueue(createData());
                     }
                 } catch (Exception e) {
@@ -110,7 +110,7 @@ public class ActionSource {
                 // 有点击行为，那么点击随机延时发送
                 dataList.forEach(x -> {
                     try {
-                        Thread.sleep(6000);
+                        Thread.sleep(50000);
                         queue.put(x);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
