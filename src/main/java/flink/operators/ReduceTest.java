@@ -1,6 +1,6 @@
 package flink.operators;
 
-import flink.source.Tupler2Source;
+import flink.source.Tuple2Source;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -12,7 +12,7 @@ public class ReduceTest {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
 
-        DataStream<Tuple2<String, Integer>> dataStream = env.addSource(new Tupler2Source.innerSource());
+        DataStream<Tuple2<String, Integer>> dataStream = env.addSource(new Tuple2Source.innerSource());
 
         KeyedStream<Tuple2<String, Integer>, Tuple> keyedStream = dataStream.keyBy(0);
 
