@@ -51,12 +51,13 @@ public class JoinTest {
 
         show.keyBy(ActionData::getUserId)
             .intervalJoin(click.keyBy(ActionData::getUserId))
-            .between(Time.seconds(-50), Time.seconds(50))
+            .between(Time.seconds(-5), Time.seconds(5))
             .process(new ProcessJoinFunction<ActionData, ActionData, Object>() {
                 @Override
                 public void processElement(ActionData actionData, ActionData actionData2, Context context, Collector<Object> collector) throws Exception {
                     System.out.println("show: " + actionData);
                     System.out.println("click: " + actionData2);
+
                 }
             });
 
@@ -79,7 +80,7 @@ public class JoinTest {
             show.setUserId(user);
             sourceContext.collect(show);
 
-            Thread.sleep(40000);
+            Thread.sleep(4000);
             ActionData click = new ActionData();
             Date now2 = new Date();
             click.setEventTime(now2.getTime());
@@ -87,6 +88,15 @@ public class JoinTest {
             click.setUserId(user);
             click.setClick(true);
             sourceContext.collect(click);
+
+            Thread.sleep(4000);
+            ActionData click3 = new ActionData();
+            Date now3 = new Date();
+            click3.setEventTime(now3.getTime());
+            click3.setTimeString(simpleDateFormat.format(now3));
+            click3.setUserId(user);
+            click3.setClick(true);
+            sourceContext.collect(click3);
         }
 
         @Override
