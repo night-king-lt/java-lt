@@ -14,3 +14,6 @@ File--> Settings--> Editor--> File and Code Templates--> Includes--> File Header
 # idea 设置 java 类无序列化 id 警告
 File--> Settings--> Editor--> Inspections--> Java--> Serialization issues--> 
  将 Serializable class without serialVersionUID 勾选
+ 
+# idea  jihuoma
+http://idea.medeming.com/jihuoma/
