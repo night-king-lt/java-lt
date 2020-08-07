@@ -21,8 +21,9 @@ public class CopyFile {
         ){
             byte[] b = new byte[200];
             int len;
+            // int read(byte[] b): 读取多个字节,并保存到数组 b 中，从数组 b 的索引为 0 的位置开始存储，返回读取了几个字节
             while((len = in.read(b)) != -1){
-                out.write(b, 0, len);
+                out.write(b, 0, len); // 把数组b 中的从 off 索引开始的 len 个字节写入到文件中
             }
         }catch (IOException e){
             e.printStackTrace();
