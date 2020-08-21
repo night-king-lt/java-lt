@@ -25,6 +25,13 @@
     </properties>
 
     <dependencies>
+        <!-- protobuf -->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${proto.version}</version>
+        </dependency>
+
         <!--  flink  -->
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -232,6 +239,13 @@
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
             <version>3.22.0-GA</version>
+        </dependency>
+
+        <!--####################### spark dependencies section #######################-->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
         </dependency>
 
     </dependencies>
