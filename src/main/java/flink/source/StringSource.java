@@ -18,11 +18,12 @@ public class StringSource {
 
         @Override
         public void run(SourceContext<String> sourceContext) throws Exception {
-            sourceContext.collect("java");
-            sourceContext.collect("hadoop");
-            sourceContext.collect("java");
-            sourceContext.collect("flink");
-            sourceContext.collect("hahah");
+            sourceContext.collect("java,1");
+            sourceContext.collect("hadoop,1");
+            sourceContext.collect("java,1");
+            sourceContext.collect("flink,1");
+            sourceContext.collect("flink,1");
+            sourceContext.collect("hahah,1");
         }
 
         @Override

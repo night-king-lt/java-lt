@@ -29,7 +29,7 @@ public class MyWatermark {
         @Override
         public Watermark getCurrentWatermark() {
             // 5 seconds
-            long maxDelayTime = 10000L;
+            long maxDelayTime = 100000L;
             return new Watermark(currentMaxTimestamp - maxDelayTime);
         }
 

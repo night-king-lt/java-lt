@@ -33,14 +33,13 @@ public class ActionSource {
 
     public static class innerSource extends RichSourceFunction<ActionData> {
 
-        static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-        final String[] action = new String[]{"show", "click"};
-        final String[] users = new String[]{"郭德纲", "于谦", "高峰"};
+        static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        final int[] action = new int[]{1, 2};
+        final String[] users = new String[]{"java", "flink", "spark"};
 
         ExecutorService poll;
         ArrayBlockingQueue<ActionData> queue;
         Runnable runnable;
-
 
         @Override
         public void open(Configuration parameters) throws Exception{
@@ -48,16 +47,14 @@ public class ActionSource {
             poll = Executors.newFixedThreadPool(1);
             runnable = () -> {
                 try {
-                    for (int i=0; i<2; i ++){
+                    for (int i=0; i<10; i ++){
                         addQueue(createData());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             };
-            for (int i = 0; i < 1; i++) {
-                poll.submit(runnable);
-            }
+            poll.submit(runnable);
             poll.shutdown();
         }
 
@@ -65,37 +62,25 @@ public class ActionSource {
         public void run(SourceContext<ActionData> sourceContext) throws Exception {
             while (true){
                 ActionData actionData = queue.take();
-                Date now = new Date();
-                String currentTime = simpleDateFormat.format(now);
-                if (actionData.getShow()){
-                    actionData.setShowTime(currentTime);
-                }else{
-                    actionData.setClickTime(currentTime);
-                }
-
                 sourceContext.collect(actionData);
             }
         }
         // 生产数据
         public List<ActionData> createData(){
             List<ActionData> result = new ArrayList<>();
-//                int index = RandomUtils.nextInt(0,2);
-            int index = 2;
+            int index = RandomUtils.nextInt(0,2) + 1;
             String token = RandomStringUtils.randomAlphabetic(5);
             String user = users[RandomUtils.nextInt(0,3)];
             for (int i=0; i<index; i++){
                 ActionData actionData = new ActionData();
                 Date now = new Date();
-                String type = action[i];
+                int type = action[i];
                 actionData.setEventTime(now.getTime());
                 actionData.setTimeString(simpleDateFormat.format(now));
                 actionData.setToken(token);
                 actionData.setUserId(user);
-                if (type.equals("show")){
-                    actionData.setShow(true);
-                }else{
-                    actionData.setClick(true);
-                }
+                actionData.setType(type);
+
                 result.add(actionData);
             }
 
@@ -110,8 +95,8 @@ public class ActionSource {
                 // 有点击行为，那么点击随机延时发送
                 dataList.forEach(x -> {
                     try {
-                        Thread.sleep(50000);
                         queue.put(x);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

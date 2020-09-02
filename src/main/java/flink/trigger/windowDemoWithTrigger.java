@@ -36,7 +36,7 @@ public class windowDemoWithTrigger {
 
         //定义数据源
         DataStream<ActionData> source = env.addSource(new RichSourceFunction<ActionData>() {
-            final String[] action = new String[]{"show", "click"};
+            final int[] action = new int[]{1, 2};
             final String[] users = new String[]{"郭德纲", "于谦", "高峰"};
 
             ExecutorService poll;
@@ -67,14 +67,6 @@ public class windowDemoWithTrigger {
             public void run(SourceContext<ActionData> sourceContext) throws Exception {
                 while (true){
                     ActionData actionData = queue.take();
-                    Date now = new Date();
-                    String currentTime = simpleDateFormat.format(now);
-                    if (actionData.getShow()){
-                        actionData.setShowTime(currentTime);
-                    }else{
-                        actionData.setClickTime(currentTime);
-                    }
-
                     sourceContext.collect(actionData);
                 }
             }
@@ -88,16 +80,12 @@ public class windowDemoWithTrigger {
                 for (int i=0; i<index; i++){
                     ActionData actionData = new ActionData();
                     Date now = new Date();
-                    String type = action[i];
+                    int type = action[i];
                     actionData.setEventTime(now.getTime());
                     actionData.setTimeString(simpleDateFormat.format(now));
                     actionData.setToken(token);
                     actionData.setUserId(user);
-                    if (type.equals("show")){
-                        actionData.setShow(true);
-                    }else{
-                        actionData.setClick(true);
-                    }
+                    actionData.setType(type);
                     result.add(actionData);
                 }
 

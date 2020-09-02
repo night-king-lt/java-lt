@@ -26,9 +26,9 @@ import java.util.Date;
  * @date 2020/7/3
  *
  *     interval join :  A join B   between -50s 50s  A流的每条数据join前后50s的 B 流数据
- *     前提： 必须使用 eventTime 设置水印
+ *     前提： 必须使用 eventTime 设置抽取时间规则，可以不设置水印， interval 与水印无关
  */
-public class JoinTest {
+public class IntervalJoin {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
         OutputTag<ActionData> clickOutputTag = new OutputTag<>("click", TypeInformation.of(ActionData.class));
@@ -40,7 +40,7 @@ public class JoinTest {
 
             @Override
             public void processElement(ActionData actionData, Context context, Collector<ActionData> collector) throws Exception {
-                if (actionData.getShow()){
+                if (actionData.getType() == 1){
                     collector.collect(actionData);
                 }else {
                     context.output(clickOutputTag, actionData);
@@ -70,33 +70,35 @@ public class JoinTest {
 
         @Override
         public void run(SourceContext<ActionData> sourceContext) throws Exception {
-            String user = "flink";
-
             ActionData show = new ActionData();
-            Date now = new Date();
-            show.setEventTime(now.getTime());
-            show.setTimeString(simpleDateFormat.format(now));
-            show.setShow(true);
-            show.setUserId(user);
+            show.setEventTime(new Date().getTime());
+            show.setTimeString(simpleDateFormat.format(new Date()));
+            show.setType(1);
+            show.setUserId("flink");
             sourceContext.collect(show);
 
             Thread.sleep(4000);
             ActionData click = new ActionData();
-            Date now2 = new Date();
-            click.setEventTime(now2.getTime());
-            click.setTimeString(simpleDateFormat.format(now2));
-            click.setUserId(user);
-            click.setClick(true);
+            click.setEventTime(new Date().getTime());
+            click.setTimeString(simpleDateFormat.format( new Date()));
+            click.setUserId("flink");
+            click.setType(2);
             sourceContext.collect(click);
 
-            Thread.sleep(4000);
-            ActionData click3 = new ActionData();
-            Date now3 = new Date();
-            click3.setEventTime(now3.getTime());
-            click3.setTimeString(simpleDateFormat.format(now3));
-            click3.setUserId(user);
-            click3.setClick(true);
-            sourceContext.collect(click3);
+            ActionData show1 = new ActionData();
+            show1.setEventTime(new Date().getTime());
+            show1.setTimeString(simpleDateFormat.format(new Date()));
+            show1.setType(1);
+            show1.setUserId("java");
+            sourceContext.collect(show1);
+
+            Thread.sleep(11000);
+            ActionData click1 = new ActionData();
+            click1.setEventTime(new Date().getTime());
+            click1.setTimeString(simpleDateFormat.format(new Date()));
+            click1.setUserId("java");
+            click1.setType(2);
+            sourceContext.collect(click1);
         }
 
         @Override
