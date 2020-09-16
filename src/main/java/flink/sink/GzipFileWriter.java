@@ -60,14 +60,13 @@ public class GzipFileWriter<T> extends StreamWriterBase<T> {
     @Override
     public void close() throws IOException {
         if (this.gOut != null){
-            super.flush();
-            this.gOut.close();
-            super.outStream = null;
+            this.gOut.finish();
+            this.gOut = null;
         }
+        super.close();
     }
 
-
-
+    
     @Override
     public Writer<T> duplicate() {
         return new GzipFileWriter<>(this);
