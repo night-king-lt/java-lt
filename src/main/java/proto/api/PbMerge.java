@@ -1,6 +1,8 @@
 package proto.api;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+import com.googlecode.protobuf.format.JsonFormat;
 import proto.AddressBookProtos;
 
 /**
@@ -13,19 +15,25 @@ public class PbMerge {
     public static void main(String[] args) throws InvalidProtocolBufferException {
         AddressBookProtos.Person.Builder p = AddressBookProtos.Person.newBuilder();
         p.setId(1);
-        p.setName("spark");
+        p.setName("姚明");
 //        p.addPhones(AddressBookProtos.Person.PhoneNumber.newBuilder().setNumber("110"));
 
         AddressBookProtos.Person.PhoneNumber.Builder number = AddressBookProtos.Person.PhoneNumber.newBuilder();
         number.setNumber("17899382746");
-//        AddressBookProtos.Person.Builder p1 = AddressBookProtos.Person.newBuilder();
-////        p1.setId(2);
-////        p1.setName("flink");
-////        p1.addPhones(number);
+        AddressBookProtos.Person.Builder p1 = AddressBookProtos.Person.newBuilder();
+        p1.setId(2);
+        p1.setName("小明");
+        p1.addPhones(number);
 ////
-////        p.mergeFrom(p1.build().toByteArray());
+        p.mergeFrom(p1.build().toByteArray());
         p.mergeFrom(number.build().toByteArray());
-        System.out.println(p);
+        System.out.println(protobufToJson(p1.build()));
 
+    }
+
+
+    public static  String protobufToJson(Message message) {
+        String jsonFormat = JsonFormat.printToString(message);
+        return jsonFormat;
     }
 }

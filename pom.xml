@@ -98,6 +98,12 @@
             <version>${flink.version}</version>
             <!--            <scope>provided</scope>-->
         </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.protobuf-java-format</groupId>
+            <artifactId>protobuf-java-format</artifactId>
+            <version>1.2</version>
+        </dependency>
         <!-- Either... (for the old planner that was available before Flink 1.9) -->
 <!--        <dependency>-->
 <!--            <groupId>org.apache.flink</groupId>-->
@@ -269,6 +275,13 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- redis -->
