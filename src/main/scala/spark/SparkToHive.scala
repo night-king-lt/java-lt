@@ -13,7 +13,7 @@ object SparkToHive {
     val sparkSession = SparkSession.builder().appName("check-data-lt").enableHiveSupport().getOrCreate()
     val sc = sparkSession.sparkContext
 
-    // 定义hive表的表结构
+    // 定义hive表的表结构   字段名和字段类型
     val schema = StructType(
       List(
         StructField("user", StringType, true),
