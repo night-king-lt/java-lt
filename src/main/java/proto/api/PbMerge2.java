@@ -1,7 +1,9 @@
 package proto.api;
 
+import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
+import org.xerial.snappy.Snappy;
 import proto.AddressBookProtos;
 
 import java.io.IOException;
@@ -21,7 +23,7 @@ public class PbMerge2 {
         AddressBookProtos.Person.PhoneNumber.Builder number = AddressBookProtos.Person.PhoneNumber.newBuilder();
         number.setNumber("17899382746");
 
-        p.mergeFrom(number.build().toByteArray());
+        fillFeatureByField(p, "phones", number.build().toByteArray());
         String result = protobufToJson(p.build());
         System.out.println(result);
 
@@ -30,5 +32,26 @@ public class PbMerge2 {
     public static  String protobufToJson(Message message) {
         String jsonFormat = PbJsonFormat.printToString(message);
         return jsonFormat;
+    }
+
+    public static void fillFeatureByField(AddressBookProtos.Person.Builder builder, String fieldString, byte[] data) throws IOException {
+        com.google.protobuf.Message.Builder curr = builder;
+
+        String[] fields = fieldString.split("\\.");
+        for (String field : fields) {
+            Descriptors.FieldDescriptor desc = curr.getDescriptorForType().findFieldByName(field);
+            if (desc == null) {
+                throw new IllegalArgumentException("未找到指定的属性, field path: " + fieldString + ", current field: " + field);
+            }
+
+            curr = curr.getFieldBuilder(desc);
+        }
+        byte[] uncompressed;
+        try{
+            uncompressed = Snappy.uncompress(data);
+        }catch (Exception e){
+            uncompressed = data;
+        }
+        curr.mergeFrom(uncompressed);
     }
 }
