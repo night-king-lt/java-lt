@@ -30,9 +30,9 @@ public class Solution1_5 {
 //        System.out.println(lengthOfLongestSubstring("aua"));
 
         // 4. 寻找两个正序数组的中位数
-        int[] a = new int[]{1, 2, 3, 5, 7};
-        int[] b = new int[]{3, 4};
-        System.out.println(findMedianSortedArray(a, b));
+//        int[] a = new int[]{1, 2, 3, 5, 7};
+//        int[] b = new int[]{3, 4};
+//        System.out.println(findMedianSortedArray(a, b));
 
         // 5. 最长回文子串
 //        System.out.println(longestPalindrome("babad"));
@@ -40,6 +40,7 @@ public class Solution1_5 {
 //
 //        System.out.println(longestPalindromeDp("babad"));
 //        System.out.println(longestPalindromeDp("cbbd"));
+        System.out.println(longestPalindromeDp("baabccc"));
 
     }
 

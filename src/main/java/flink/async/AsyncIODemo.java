@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class AsyncIODemo {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.enableCheckpointing(30000);
         env.setParallelism(1);
         final int maxCount = 6;
         final int taskNum = 1;

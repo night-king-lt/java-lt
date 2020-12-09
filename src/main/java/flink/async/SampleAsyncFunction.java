@@ -15,7 +15,7 @@ import java.util.function.Supplier;
  * @Version 1.0
  */
 public class SampleAsyncFunction extends RichAsyncFunction<Integer, String> {
-    private long[] sleep = {100L, 1000L, 5000L, 2000L, 6000L, 100L};
+    private long[] sleep = {1000L, 10000L, 50000L, 20000L, 60000L, 1000L};
 
     @Override
     public void open(Configuration parameters) throws Exception {
@@ -68,5 +68,10 @@ public class SampleAsyncFunction extends RichAsyncFunction<Integer, String> {
         }).thenAccept((Integer dbResult) -> {
             resultFuture.complete(Collections.singleton(String.valueOf(dbResult)));
         });
+    }
+
+    @Override
+    public void timeout(Integer input, ResultFuture<String> resultFuture) throws Exception {
+        resultFuture.complete(Collections.singleton("fail"));
     }
 }
