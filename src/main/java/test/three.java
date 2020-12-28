@@ -11,8 +11,22 @@ import java.util.Scanner;
  */
 public class three {
         public static void main(String[] args) {
-            int a = 1/2;
-            System.out.println(a);
+            System.out.println(JumpFloor(4));
         }
+
+    public static int JumpFloor(int target) {
+        if(target < 3){
+            return target;
+        }
+        int result = 0;
+        int one = 1;
+        int two = 2;
+        for(int i = 3; i <= target; i++){
+            result = one + two;
+            one = two;
+            two = result;
+        }
+        return result;
+    }
 
 }
