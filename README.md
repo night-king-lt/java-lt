@@ -17,3 +17,6 @@ File--> Settings--> Editor--> Inspections--> Java--> Serialization issues-->
  
 # idea  jihuoma
 http://idea.medeming.com/jihuoma/
+
+#ssh 客户端
+Termius

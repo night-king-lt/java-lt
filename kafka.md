@@ -16,6 +16,5 @@ bin\windows\kafka-server-start.bat config\server.properties
  
  # 打开一个consumer
   cd E:\soft\kafka_2.12-2.6.0\bin\windows
- kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic show --from-beginning
- kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic click --from-beginning
- kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic lable --from-beginning
+ 
+ kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test --from-beginning

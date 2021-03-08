@@ -7,7 +7,9 @@ package test;
  */
 public class HelloMan {
     public static void main(String[] args) {
-        test(true);
+//        test(true);
+        String a = "flink";
+        System.out.println(new String(a.getBytes()));
     }
 
     public static void test(boolean f){
