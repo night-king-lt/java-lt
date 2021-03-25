@@ -6,11 +6,11 @@
 
     <groupId>java-lt</groupId>
     <artifactId>java-lt</artifactId>
+    <packaging>pom</packaging>
     <version>1.0</version>
 
     <properties>
         <flink.version>1.11.2</flink.version>
-<!--        <flink.version>1.11.1</flink.version>-->
         <proto.version>3.7.1</proto.version>
         <hadoop.version>2.6.0-cdh5.7.0</hadoop.version>
         <scala.binary.version>2.11</scala.binary.version>
