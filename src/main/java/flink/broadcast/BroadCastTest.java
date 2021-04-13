@@ -1,5 +1,6 @@
-package flink;
+package flink.broadcast;
 
+import flink.WordCountJava;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;

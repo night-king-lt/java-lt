@@ -1,4 +1,4 @@
-package flink;
+package flink.broadcast;
 
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
@@ -20,7 +20,7 @@ public class BroadcastStreamDemo {
         final StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
 
         // 配置处理环境的并发度为4
-        environment.setParallelism(4);
+        environment.setParallelism(1);
 
         final MapStateDescriptor<String, String> CONFIG_KEYWORDS = new MapStateDescriptor<>(
                 "config-keywords",
@@ -41,7 +41,7 @@ public class BroadcastStreamDemo {
             };
 
             /**
-             * 数据源：模拟每30秒随机更新一次拦截的关键字
+             * 数据源：模拟每1秒随机更新一次拦截的关键字
              * @param ctx
              * @throws Exception
              */
@@ -49,12 +49,10 @@ public class BroadcastStreamDemo {
             public void run(SourceContext<String> ctx) throws Exception {
                 int size = dataSet.length;
                 while (isRunning) {
-                    TimeUnit.SECONDS.sleep(30);
-//                    int seed = (int) (Math.random() * size);
+                    TimeUnit.SECONDS.sleep(5);
                     //随机选择关键字发送
-                    int seed = 0;
+                    int seed = (int) (Math.random() * size);
                     ctx.collect(dataSet[seed]);
-                    System.out.println("读取到上游发送的关键字:" + dataSet[seed]);
                 }
             }
 
@@ -79,7 +77,7 @@ public class BroadcastStreamDemo {
             };
 
             /**
-             * 模拟每3秒随机产生1条消息
+             * 模拟每5秒随机产生1条消息
              * @param ctx
              * @throws Exception
              */
@@ -87,7 +85,7 @@ public class BroadcastStreamDemo {
             public void run(SourceContext<String> ctx) throws Exception {
                 int size = dataSet.length;
                 while (isRunning) {
-                    TimeUnit.SECONDS.sleep(3);
+                    TimeUnit.SECONDS.sleep(5);
                     int seed = (int) (Math.random() * size);
                     ctx.collect(dataSet[seed]);
                     System.out.println("读取到上游发送的消息：" + dataSet[seed]);
@@ -123,8 +121,13 @@ public class BroadcastStreamDemo {
 
             @Override
             public void processBroadcastElement(String value, Context ctx, Collector<String> out) throws Exception {
-//                keywords = value;
-//                System.out.println("关键字更新成功，更新拦截关键字：" + value);
+                if (value != null && !value.equals(keywords)){
+                    keywords = value;
+                    System.out.println("关键字更新成功，更新拦截关键字：" + keywords);
+                }else {
+                    System.out.println("关键字无变动，拦截关键字：" + keywords);
+                }
+
             }
         }).print();
 
