@@ -13,6 +13,86 @@ import java.io.IOException;
  */
 public class ProtoTools {
 
+    /**
+     * @param builder   需要填充特征的结果pb
+     * @param fieldString   pb对应的字段名全路径
+     * @param isRepeated  pb是否是 repeated
+     * @param isFather  二进制数据格式对应的pb是否是父pb （一般redis存的都是父pb）（前提是isRepeated=true）
+     * @param data   pb的二进制数据
+     * @throws IOException
+     */
+    public static void fillFeatureByField(com.google.protobuf.Message.Builder builder, String fieldString, boolean isRepeated, boolean isFather, byte[] data) throws IOException {
+        com.google.protobuf.Message.Builder curr = builder;
+
+        String[] fields = fieldString.split("\\.");
+        int len = isRepeated ? fields.length - 1 :fields.length;
+
+        for (int i = 0; i < len; i++ ) {
+            Descriptors.FieldDescriptor desc = curr.getDescriptorForType().findFieldByName(fields[i]);
+            if (desc == null) {
+                throw new IllegalArgumentException("未找到指定的属性, field path: " + fieldString + ", current field: " + fields[i]);
+            }
+            curr = curr.getFieldBuilder(desc);
+        }
+
+        if (isRepeated){
+            Descriptors.FieldDescriptor desc = curr.getDescriptorForType().findFieldByName(fields[len]);
+            if (desc.isRepeated()){
+                if (isFather){  // 如果redis里面存的是父节点
+                    curr.mergeFrom(data);
+                }else{  // 如果redis里面存的就是当前节点
+                    com.google.protobuf.Message.Builder repeated = curr.newBuilderForField(desc);
+                    repeated.mergeFrom(data);
+                    curr.addRepeatedField(desc, repeated.build());
+                }
+            }else{
+                curr = curr.getFieldBuilder(desc);
+                curr.mergeFrom(data);
+            }
+        }else{
+            curr.mergeFrom(data);
+        }
+    }
+
+    /**
+     *   通过pb的字段层级，获得对应子pb的字符串
+     * @param builder  pb数据
+     * @param fieldString 字段层级
+     * @param isRepeated 是否重复
+     * @return
+     */
+    public static String getFeatureByField(com.google.protobuf.Message.Builder builder, String fieldString, boolean isRepeated){
+        com.google.protobuf.Message.Builder curr = builder;
+        com.google.protobuf.Message.Builder result;
+        String[] fields = fieldString.split("\\.");
+        int len = isRepeated ? fields.length - 1: fields.length;
+        for (int i = 0; i < len; i++ ) {
+            Descriptors.FieldDescriptor desc = curr.getDescriptorForType().findFieldByName(fields[i]);
+            if (desc == null) {
+                throw new IllegalArgumentException("未找到指定的属性, field path: " + fieldString + ", current field: " + fields[i]);
+            }
+            curr = curr.getFieldBuilder(desc);
+        }
+        if (isRepeated) {
+            // 如果是重复字段，定义一个空的父pb
+            result = curr.getDefaultInstanceForType().toBuilder();
+            // 重复属性: 遍历 data.repeated, 将每一个元素 add 到 result 中
+            String field = fields[fields.length - 1];
+            Descriptors.FieldDescriptor desc = curr.getDescriptorForType().findFieldByName(field);
+            int count = curr.getRepeatedFieldCount(desc);
+            for (int i = 0; i < count; i++) {
+                Object val = curr.getRepeatedField(desc, i);
+                // 将重复的字段加入到父pb中
+                result.addRepeatedField(desc, val);
+            }
+            return result.toString();
+        } else {
+            // 非 repeated 属性, 直接 merge
+//            curr.mergeFrom(uncompressed);
+            return curr.toString();
+        }
+    }
+
     public static void fillFeatureByField(com.google.protobuf.Message.Builder builder, String fieldString, boolean isRepeated, byte[] data) throws IOException {
         com.google.protobuf.Message.Builder curr = builder;
 

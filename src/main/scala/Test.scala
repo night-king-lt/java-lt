@@ -9,13 +9,11 @@ import org.joda.time.DateTime
  */
 object Test {
   def main(args: Array[String]): Unit = {
-    val date = new SimpleDateFormat("yyyyMMdd/HH").parse("20200709/08")
-    val dateTime = new DateTime(date.getTime)
-    val dt = dateTime.toString("yyyyMMdd")
-    val hour = dateTime.toString("H")
-    println(dt + " " + hour)
-    println(dateTime.getMillis)
-    val now = new SimpleDateFormat("yyyyMMdd/HH").format(System.currentTimeMillis())
-    println(now)
+    val child = "asdf"
+    val key = child match {
+      case null => "null"
+      case _ => "not null"
+    }
+    println(key)
   }
 }

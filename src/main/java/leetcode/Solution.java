@@ -7,63 +7,40 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Solution {
 
     public static void main(String[] args) {
-        int[][] op = new int[][]{{1,1,1},{1,2,2},{1,3,2},{2,1},{1,4,4},{2,2}};
-        int k = 3;
-        int[] result = LRU(op, k);
-        for (int next: result){
-            System.out.println(next);
-        }
+        int[] input = new int[]{4,5,1,6,2,7,3,8};
+        int k = 4;
+        ArrayList<Integer> result = GetLeastNumbers_Solution(input, k);
+//        result.forEach(System.out::println);
     }
 
     /**
-     * lru design
-     * @param operators int整型二维数组 the ops
-     * @param k int整型 the k
-     * @return int整型一维数组
+     * 给定一个数组，找出其中最小的K个数。例如数组元素是4,5,1,6,2,7,3,8这8个数字，
+     * 则最小的4个数字是1,2,3,4。如果K>数组的长度，那么返回一个空的数组
+     *
+     * 输入：[4,5,1,6,2,7,3,8],4
+     * 输出：[1,2,3,4]
      */
-    public static int[] LRU(int[][] operators, int k) {
-        // write code here
-        int len = (int) Arrays.stream(operators).filter(x -> x[0] == 2).count();
-        int[] res = new int[len];
-        LRUMap lmap = new LRUMap(k);
-        for(int i = 0, j = 0; i < operators.length; i++){
-            if(operators[i][0] == 1){
-                lmap.set(operators[i][1], operators[i][2]);
-            }else{
-                res[j++] = lmap.get(operators[i][1]);
+    public static ArrayList<Integer> GetLeastNumbers_Solution(int [] input, int k) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if(k > input.length){
+            return result;
+        }
+        // 定义一个大顶堆，即从大到小输出的优先队列
+        Queue<Integer> queue = new PriorityQueue<>(k, (a, b) -> (b - a));
+        for (int i = 0; i < input.length; i++){
+            if(queue.size() < k){ // 如果队列没有k个元素，填满
+                queue.add(input[i]);
+            }else{ // 如果队列达到k个元素，则判断当前元素是否大于堆顶元素
+                if (queue.element() > input[i]){
+                    queue.poll();
+                    queue.add(input[i]);
+                }
             }
         }
-
-        return res;
-    }
-
-
-    static class LRUMap{
-        HashMap<Integer, Integer> map;
-        int capacity;
-        Queue<Integer> useCommon;
-
-        LRUMap(int capacity){
-            this.capacity = capacity;
-            map = new HashMap<>();
-            useCommon = new ConcurrentLinkedQueue<>();
+        while(queue.size() > 0){
+            System.out.println(queue.poll());
         }
-
-        public void set(int key, int val){
-            useCommon.add(key);
-            if(map.size() < capacity){
-                map.put(key, val);
-            }else{
-                map.remove(useCommon.poll());
-            }
-        }
-
-        public int get(int key){
-            useCommon.add(key);
-            if(map.containsKey(key)){
-                return map.get(key);
-            }
-            return -1;
-        }
+        result.addAll(queue);
+        return result;
     }
 }

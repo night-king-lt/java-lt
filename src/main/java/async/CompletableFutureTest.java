@@ -1,11 +1,17 @@
 package async;
 
+import org.apache.commons.lang.RandomStringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 public class CompletableFutureTest {
     public static void main(String[] args) throws Exception {
-        callback();
+        handleList();
     }
 
     /**
@@ -147,5 +153,66 @@ public class CompletableFutureTest {
             return result;
         });
         System.out.println(future.get());
+    }
+
+    /**
+     *  join 多个线程的返回结果，整体耗时以最长的来定
+     * @throws Exception
+     */
+    public static void handleList() throws Exception{
+        // 创建一个缓存线程池
+        ExecutorService pool = Executors.newCachedThreadPool();
+        long start = System.currentTimeMillis();
+        CompletableFuture<String> result = CompletableFuture.supplyAsync(() -> RandomStringUtils.randomAlphabetic(1));
+        for (int i = 0; i < 20; i++){
+            int finalI = i;
+            result = result.thenCombineAsync(CompletableFuture.supplyAsync(() -> {
+                try {
+                    Thread.sleep(finalI * 1000);
+                    System.out.println("线程：" + Thread.currentThread().getName() + " sleep: " + finalI + "s");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return RandomStringUtils.randomAlphabetic(1);
+            }, pool), (r1, r2) -> r1 + " = " + r2);
+        }
+        System.out.println("result: " + result.get(200, TimeUnit.SECONDS));
+        // 整体请求时间以最长的来定
+        System.out.println("senconds:" + (System.currentTimeMillis() - start)/1000);
+
+    }
+
+    public static void thenCombineAsync() throws Exception{
+        long start = System.currentTimeMillis();
+        CompletableFuture<String> result = CompletableFuture.supplyAsync(() -> {
+            try {
+                // 这里模拟微服务A的查询接口
+                System.out.println("A======" + Thread.currentThread().getName());
+                TimeUnit.SECONDS.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return RandomStringUtils.randomAlphabetic(10);
+        }).thenCombineAsync(
+                CompletableFuture.supplyAsync(() -> {
+                    try {
+                        // 这里模拟微服务B的查询接口
+                        System.out.println("completablefutureB======" + Thread.currentThread().getName());
+                        TimeUnit.SECONDS.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    return RandomStringUtils.randomAlphabetic(20);
+                })
+                , (r1, r2) -> {
+                    // 合并两个查询结果
+                    return r1 + " = " + r2;
+                });
+
+
+        System.out.println("main======" + Thread.currentThread().getName());
+        System.out.println(result.get());
+        // 整体请求时间以最长的来定
+        System.out.println("senconds:" + (System.currentTimeMillis() - start));
     }
 }

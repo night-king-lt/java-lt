@@ -34,21 +34,21 @@ public class QuickSort {
         int i, j, t, tmp;
         i = low ;
         j = hight;
-        t = n[low];
+        t = n[low]; // 定义一个基准数
         while ( i < j ){
-            while( t <= n[j] && i < j){
+            while( t <= n[j] && i < j){  // j从右往左找比基准数小的
                 j--;
             }
-            while( t >= n[i] && i < j){
+            while( t >= n[i] && i < j){  // i从左往右找比基准数大的
                 i++;
             }
-            if( i < j){
+            if( i < j){  // 如果i 依旧小于 j   交换i，j下标对应的元素
                 tmp = n[j];
                 n[j] = n[i];
                 n[i] = tmp;
             }
         }
-        n[low] = n[i];
+        n[low] = n[i]; // 基准数归位
         n[i] = t;
         qSort(n, low, i);
         qSort(n, i+1, hight);
