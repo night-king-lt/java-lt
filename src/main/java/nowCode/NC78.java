@@ -2,12 +2,11 @@ package nowCode;
 
 /**
  * @Author liu.teng
- * @Date 2021/6/18 16:05
- * @Version 1.0
+ * @Date 2021/6/18
  *
  *    输入一个链表，反转链表后，输出新链表的表头。
  */
-public class Nc78 {
+public class NC78 {
     public ListNode ReverseList(ListNode head) {
         // 判断链表为空或长度为1的情况
         if (head == null || head.next == null){
@@ -24,7 +23,7 @@ public class Nc78 {
         return pre;
     }
 
-     public static class ListNode {
+    private static class ListNode {
          int val;
          ListNode next = null;
 
