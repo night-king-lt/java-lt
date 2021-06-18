@@ -29,7 +29,7 @@ public class IterationsTest {
 
         DataStream<Long> someIntegers = env.generateSequence(1, 10);
 
-        someIntegers.print();
+        someIntegers.map(t -> "source: " + t).print();
 
         IterativeStream<Long> head = someIntegers.iterate();
 
@@ -53,7 +53,7 @@ public class IterationsTest {
         // 提供给该closeWith函数的DataStream将反馈到迭代头(head), 也就是将大于0的数据返回给迭代头再迭代运行，直到能输出到下游
         head.closeWith(result.getSideOutput(outputTag));
 
-        result.print();
+        result.map(t -> "sink: " + t).print();
 
         env.execute();
 
