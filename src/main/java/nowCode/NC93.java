@@ -68,7 +68,7 @@ public class NC93 {
             map.get(key).val = val;
         }else{
             if(map.size() == k){  // map已满
-                int rk = tail.prev.key; // 获取最靠谱尾节点的节点rk的key
+                int rk = tail.prev.key; // 获取最靠尾节点的节点rk的key
                 map.remove(rk);  // map去掉该k，v
                 tail.prev.prev.next = tail; // 尾结点的前两个节点指向尾节点，即跨过要删除的节点rk
                 tail.prev = tail.prev.prev; // 尾结点指向尾结点的前两个节点，即跨过要删除的节点rk
