@@ -34,8 +34,8 @@ import java.util.Map;
 public class NC93 {
 
     private final Map<Integer, Node> map = new HashMap<>(); // 记录双向链表里的值，为了快速查询到key
-    private Node head = new Node(-1, -1);
-    private Node tail = new Node(-1, -1);
+    private final Node head = new Node(-1, -1);
+    private final Node tail = new Node(-1, -1);
     private int k;
 
     public int[] LRU (int[][] operators, int k) {
