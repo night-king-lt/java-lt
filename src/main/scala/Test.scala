@@ -8,12 +8,18 @@ import org.joda.time.DateTime
  * @version 1.0
  */
 object Test {
+
+  val timeFormat = "yyyyMMdd/HH/m0/"
+
   def main(args: Array[String]): Unit = {
-    val child = "asdf"
-    val key = child match {
-      case null => "null"
-      case _ => "not null"
-    }
-    println(key)
+    val date = new SimpleDateFormat("yyyyMMdd/HH/mm").parse("20210721/14/05")
+    val dateTime = new DateTime(date.getTime)
+    println(getMinutePath(dateTime))
+  }
+
+  def getMinutePath(d: DateTime): String ={
+    val hour = d.toString("yyyyMMdd/HH/")
+    val mimute = d.toString("mm").charAt(0) + "0/"
+    hour + mimute
   }
 }

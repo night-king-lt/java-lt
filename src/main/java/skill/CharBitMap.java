@@ -15,23 +15,23 @@ public class CharBitMap {
         bitmap = new char[this.length];
     }
 
-    public static void intToChar(int n){
-        if (n < 0 || n > 1000){
-            throw new IllegalArgumentException("length value " + n + " is  illegal!");
-        }
-        // 求出该n所在bitMap的下标,等价于"n / 8"
-        int index =  n >> 8;
-        // 求出该值的偏移量(求余),等价于"n % 31"
-        int offset = (int) n & 31;
-        return index;
-    }
-
-    public static void main(String[] args) {
-        String c = intToChar(3);
-        System.out.println(c.getBytes());
-        System.out.println(Integer.parseInt(c, 2));
-        char a = 0b11;
-        System.out.println(a);
-
-    }
+//    public static void intToChar(int n){
+//        if (n < 0 || n > 1000){
+//            throw new IllegalArgumentException("length value " + n + " is  illegal!");
+//        }
+//        // 求出该n所在bitMap的下标,等价于"n / 8"
+//        int index =  n >> 8;
+//        // 求出该值的偏移量(求余),等价于"n % 31"
+//        int offset = (int) n & 31;
+//        return index;
+//    }
+//
+//    public static void main(String[] args) {
+//        String c = intToChar(3);
+//        System.out.println(c.getBytes());
+//        System.out.println(Integer.parseInt(c, 2));
+//        char a = 0b11;
+//        System.out.println(a);
+//
+//    }
 }
