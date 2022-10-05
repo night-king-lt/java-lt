@@ -11,7 +11,7 @@
 
     <properties>
         <flink.version>1.11.2</flink.version>
-        <proto.version>3.7.1</proto.version>
+        <proto.version>3.16.3</proto.version>
         <hadoop.version>2.6.0-cdh5.7.0</hadoop.version>
         <scala.binary.version>2.11</scala.binary.version>
         <spark.version>2.4.7</spark.version>
